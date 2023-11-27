@@ -23,6 +23,7 @@ const Employmenthr = () => {
   const [yearPicker, setYearPicker] = useState(null);
   const [monthPicker, setMonthPicker] = useState(null);
   const [selarys, setSelary] = useState(0);
+  // console.log(monthPicker);
   const onClick = (user) => {
     setUser(user);
     setShowModal(!showModal);
@@ -259,7 +260,7 @@ const Employmenthr = () => {
                       />
                     </div>
                   </>
-               
+                
               </td>
               <td>
                 {!s_users?.veryfi ? (
@@ -284,8 +285,9 @@ const Employmenthr = () => {
         <Modal.Body>
           <div className="space-y-6">
             <Modal.Header>
-              {s_user?.fullname}'s monthli salary is{" "}
-              <span className="font-extrabold text-xl">{s_user?.salary}$</span>
+              <p>{s_user?.fullname}'s monthli salary is{" "}
+              <span className="font-extrabold text-xl">{s_user?.salary}$</span></p>
+              <p>Bank Account Number: <span className="font-extrabold text-xl">{s_user?.bank_account_no}</span></p>
             </Modal.Header>
             <Modal.Body>
               <div className="space-y-6">
@@ -325,7 +327,7 @@ const Employmenthr = () => {
             </Modal.Body>
             
             <Elements stripe={stripePromise}>
-                <CheckoutForm salary={s_user?.salary} veryfi={s_user?.veryfi}></CheckoutForm>
+                <CheckoutForm salary={s_user?.salary} veryfi={s_user?.veryfi} month={monthPicker} amount={s_user?.salary}></CheckoutForm>
               </Elements>
           </div>
         </Modal.Body>

@@ -48,6 +48,9 @@ export const router = createBrowserRouter([
           {
             path: "/dashbord/employee-list-hr",
             element: <Employmenthr></Employmenthr>
+          },
+          {
+            path: "/dashbord/employee-list-hr/details/:slug"
           }
         ]
   },

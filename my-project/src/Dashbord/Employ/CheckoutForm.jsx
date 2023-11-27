@@ -2,15 +2,23 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
 import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
-const CheckoutForm = ({salary , veryfi}) => {
-  // console.log(salary , veryfi);
+const CheckoutForm = ({salary , veryfi , month , amount}) => {
+  console.log(salary , veryfi , month , amount);
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret , setClintSecret] = useState();
   const [error, setError] = useState('');
   const [trangrstionId , setTrangistionId] = useState("");
   const axiosSecure = useAxiosSecure();
-  const {user} = useContext(AuthContext)
+  const {user} = useContext(AuthContext);
+
+  const payment ={
+    email: user?.email,
+    trangrstionId,
+    month,
+    amount,
+  }
+  
   useEffect(() => {
     
     axiosSecure.post('/create-payment-intent', { salary: salary })
@@ -72,7 +80,11 @@ const CheckoutForm = ({salary , veryfi}) => {
       console.log("payment entent " , paymentIntent);
       setTrangistionId(paymentIntent.id);
     }
-  };
+
+    const res = await axiosSecure.post("/payment" , payment);
+    // console.log(res);
+  
+  }
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -104,7 +116,7 @@ const CheckoutForm = ({salary , veryfi}) => {
           
         </div>
         <p className="text-center text-red-700">{error}</p>
-       
+        
       </form>
     </div>
   );
