@@ -2,7 +2,7 @@ import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
 import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
-const CheckoutForm = ({salary , veryfi , month , amount}) => {
+const CheckoutForm = ({salary , veryfi , month , amount , email}) => {
   console.log(salary , veryfi , month , amount);
   const stripe = useStripe();
   const elements = useElements();
@@ -13,7 +13,7 @@ const CheckoutForm = ({salary , veryfi , month , amount}) => {
   const {user} = useContext(AuthContext);
 
   const payment ={
-    email: user?.email,
+    email,
     trangrstionId,
     month,
     amount,
@@ -40,7 +40,7 @@ const CheckoutForm = ({salary , veryfi , month , amount}) => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("fthyrtd");
+    console.log(salary);
 
     if (!stripe || !elements) {
       return;

@@ -24,6 +24,7 @@ const userRole = userLogin[0]?.selectedRole;
     <div className="flex">
       <div>
       <aside className="flex flex-col w-64 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+      <Link to="/">
       <div className="flex flex-col justify-center items-center">
           <div >
           <img src="https://i.ibb.co/nQ5wcXF/226-2261312-employee-clipart-employee-icon-employee-management-system-logo-removebg-preview.png"
@@ -35,6 +36,7 @@ const userRole = userLogin[0]?.selectedRole;
            <p>𝐄𝐦𝐩𝐥𝐨𝐲𝐞𝐞 𝐌𝐚𝐧𝐚𝐠𝐞𝐦𝐞𝐧𝐭</p>
            </div>
           </div>
+      </Link>
 
         <div className="flex flex-col justify-between flex-1 mt-6">
           <nav className="flex-1 -mx-3 space-y-3">
@@ -67,7 +69,23 @@ const userRole = userLogin[0]?.selectedRole;
                   </Sidebar.Item></Link>
                 </Sidebar.Collapse> : " "
                 }
-                
+                {
+                  userRole === "Employee" ? 
+                  
+                  <Link to='/dashbord/payment-history'><Sidebar.Item icon={<Users size={24} />}>
+                  Salary History
+                  </Sidebar.Item></Link>
+                : " "
+                }
+                 {
+                  userRole === "Employee" ? 
+                  
+                  <Link to='/dashbord/work-sheet'>
+                    <Sidebar.Item icon={<TreeStructure size={24} />}>     
+                    Work Sheet            
+                  </Sidebar.Item></Link>
+                : " "
+                }
                 <Sidebar.Item href="#" icon={<Users size={24} />}>
                   Users
                 </Sidebar.Item>

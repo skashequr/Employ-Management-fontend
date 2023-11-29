@@ -9,6 +9,11 @@ import Employment from "../Dashbord/Employ/Employment";
 import PrivateRoute from "./PrivetRoutes";
 import Employmenthr from "../Dashbord/Employ/EmployManageHr";
 
+import BarCharts from "../Dashbord/BarChart/BarChart";
+import Employ from "../Dashbord/Employ/Employ";
+import WorkSheet from "../Dashbord/workSheet/workSheet";
+
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -50,8 +55,19 @@ export const router = createBrowserRouter([
             element: <Employmenthr></Employmenthr>
           },
           {
-            path: "/dashbord/employee-list-hr/details/:slug"
+            path: "/dashbord/employee-list-hr/details/:slug",
+            element: <BarCharts></BarCharts>
+          },
+          {
+            path: "/dashbord/payment-history",
+            element: <Employ></Employ>,
+          },
+          {
+            path:"/dashbord/work-sheet",
+            element: <WorkSheet></WorkSheet>
           }
+          
+
         ]
   },
 ]);

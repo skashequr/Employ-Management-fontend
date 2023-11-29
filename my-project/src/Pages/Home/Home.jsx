@@ -5,6 +5,7 @@ import { CarouselComponent } from '../../Components/Slider/Slider';
 import Tems from '../../Components/Tems/Tems';
 import TestimonialSection from '../../Components/Testmonial/Testmonial';
 
+
 const Home = () => {
     return (
         <div>
@@ -13,6 +14,7 @@ const Home = () => {
             <TestimonialSection></TestimonialSection>
             <Tems></Tems>
             <Maps></Maps>
+            
         </div>
     );
 };

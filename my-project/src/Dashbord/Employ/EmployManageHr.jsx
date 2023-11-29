@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import { Button, Modal } from "keep-react";
 import { CloudArrowUp } from "phosphor-react";
 import CheckoutForm from "./CheckoutForm";
+import { Link } from "react-router-dom";
 const Employmenthr = () => {
   const [showModal, setShowModal] = useState(false);
   const [s_user, setUser] = useState(null);
@@ -266,9 +267,11 @@ const Employmenthr = () => {
                 {!s_users?.veryfi ? (
                   <p>Verifi frist</p>
                 ) : (
+                  <Link to={`/dashbord/employee-list-hr/details/${s_users?.email}`}>
                   <button className="text-white p-2 rounded-md bg-primary-600 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
                     Details
                   </button>
+                  </Link>
                 )}
               </td>
             </tr>
@@ -327,7 +330,7 @@ const Employmenthr = () => {
             </Modal.Body>
             
             <Elements stripe={stripePromise}>
-                <CheckoutForm salary={s_user?.salary} veryfi={s_user?.veryfi} month={monthPicker} amount={s_user?.salary}></CheckoutForm>
+                <CheckoutForm salary={s_user?.salary} veryfi={s_user?.veryfi} month={monthPicker} amount={s_user?.salary} email={s_user?.email}></CheckoutForm>
               </Elements>
           </div>
         </Modal.Body>
