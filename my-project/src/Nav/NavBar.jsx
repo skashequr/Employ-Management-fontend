@@ -110,19 +110,8 @@ export const NavbarComponent = () => {
               Dashbord
             </NavLink>
 
-            
-            {user?.email ? (
-              <button className="py-2 px-3 text-black rounded-xl" onClick={handleLogOut}>LogOut</button>    
-            ) : (
-              <NavLink
-                to="/login"
-                className={({ isActive, isPending }) =>
-                  isPending
-                    ? "py-2"
-                    : isActive
-                    ? "bg-blue-500 py-2 px-3 text-white rounded-xl"
-                    : 
-                    <NavLink
+            {
+              !user?.email ? (<NavLink
               to="/regester"
               className={({ isActive, isPending }) =>
                 isPending
@@ -133,7 +122,20 @@ export const NavbarComponent = () => {
               }
             >
               Regester
-            </NavLink>
+            </NavLink>) :""
+            }
+            {user?.email ? (
+              <button className="py-2 px-3 text-black rounded-xl" onClick={handleLogOut}>LogOut</button>    
+            ) : (
+              <NavLink
+                to="/login"
+                className={({ isActive, isPending }) =>
+                  isPending
+                    ? "py-2"
+                    : isActive
+                    ? "bg-blue-500 py-2 px-3 text-white rounded-xl"
+                    : " "
+                    
                 }
               >
                 Login

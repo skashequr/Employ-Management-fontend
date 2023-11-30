@@ -30,6 +30,10 @@ const Regester = () => {
     const salary = e.target.salary.value;
     const designation = e.target.designation.value;
     const fullname = e.target.fullname.value;
+    if (!/[A-Z]/.test(password)) {
+      setError("Password must contain at least one capital letter.")
+      return ;
+    }
     console.log(
       email,
       password,

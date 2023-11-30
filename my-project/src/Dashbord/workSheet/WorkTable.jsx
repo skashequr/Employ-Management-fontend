@@ -15,20 +15,29 @@ import { Pagination } from "keep-react";
 const WorkTable = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
-  const { refetch, data: workSheetData = [] } = useQuery({
-    queryKey: ["workSheetData", user?.email],
-    queryFn: async () => {
-      const res = await axiosSecure.get(`/workSheet/?email=${user.email}`);
-      return res.data;
-    },
-  });
-//   console.log(workSheetData);
-
+  // const { refetch, data: workSheetData = [] } = useQuery({
+  //   queryKey: ["workSheetData", user?.email],
+  //   queryFn: async () => {
+  //     const res = await axiosSecure.get(`/workSheet/?email=${user.email}`);
+  //     return res.data;
+  //   },
+  // });
   // Paggination
   const itemsPerpage = 5;
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [workData , setWorkData] = useState([]);
+  const { refetch:workSheedRefech, data: WorkSheedData = [] } = useQuery({
+    queryKey: ['WorkSheedData', user?.email , currentPage , itemsPerpage],
+    queryFn: async() => {
+        // why my hole system is crushed when i sue refetch in heare........
+        const res = await axiosSecure.get(`/workSheetPagination?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`);
+        return res.data;
+    }
+})
+//   console.log(workSheetData);
+
+
   useEffect(() => {
     fetch("http://localhost:5000/workSheetCount")
       .then((res) => res.json())
@@ -40,17 +49,20 @@ const WorkTable = () => {
 
   useEffect(() => {
     fetch(`http://localhost:5000/workSheetPagination?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`)
-        .then(res => res.json())
+    
+    .then(res => res.json())
         .then(data => setWorkData(data))
-}, [currentPage , user?.email]);
+}, [currentPage , user?.email]);  // WorkSheedData
+
+console.log(WorkSheedData);
   return (
-    <div>
+    <div>    
       <Table showCheckbox={true}>
         <Table.Caption>
           <div className="my-5 flex items-center justify-between px-6">
             <div className="flex items-center gap-5">
               <p className="text-body-1 font-semibold text-metal-600">
-                Cash Out Transactions
+               Your Work History
               </p>
             </div>
             <div className="flex items-center gap-5">
@@ -99,7 +111,7 @@ const WorkTable = () => {
           </Table.HeadCell>
           <Table.HeadCell className="min-w-[100px]" />
         </Table.Head>
-        {workData?.map((work) => (
+        {WorkSheedData?.map((work) => (
           <Table.Body key={work?._id} className="divide-y divide-gray-25">
             <Table.Row className="bg-white">
               
@@ -188,7 +200,7 @@ const WorkTable = () => {
         <Pagination
           currentPage={currentPage}
           onPageChange={setCurrentPage}
-          totalPages={30}
+          totalPages={numberOfPages}
           iconWithOutText={true}
           prevNextShape="none"
           showGoToPaginate={true}

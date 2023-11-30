@@ -14,6 +14,9 @@ const Employment = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
 
+
+
+ 
   const handleSelectChange = (event , _id) => {
     setSelectedValue(event.target.value);
     Swal.fire({
@@ -52,6 +55,9 @@ const Employment = () => {
         });
       }
     });
+
+
+    
   };
 
   console.log(selectedValue);

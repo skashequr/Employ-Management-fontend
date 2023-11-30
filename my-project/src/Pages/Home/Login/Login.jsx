@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 const Login = () => {
     const navigate = useNavigate();
     const [error, setError] = useState("");
+   
     const {loginWithEmailPass} = useContext(AuthContext);
     const handleLogin =(e) => {
         e.preventDefault();
@@ -32,11 +33,12 @@ const Login = () => {
                 });
                 navigate(from, { replace: true });
             })
-            .catch(error => {
-                console.error('Error:', error);
-                setError(error)
+            .catch((error) => {
+                const errorMessage = error.message;
+                setError(errorMessage);
               });
     }
+    console.log(error);
     return (
         <div className="flex justify-center items-center">
             <div className="flex flex-col w-full max-w-md px-4 py-8 bg-white rounded-lg shadow dark:bg-gray-800 sm:px-6 md:px-8 lg:px-10">
@@ -82,8 +84,9 @@ const Login = () => {
                         You don&#x27;t have an account?
                     </span>
                 </Link>
-                <p className="text-red-700">{error}</p>
+                
             </div>
+            <p className="text-red-700 text-center">{error}</p>
         </div>
         </div>
     );

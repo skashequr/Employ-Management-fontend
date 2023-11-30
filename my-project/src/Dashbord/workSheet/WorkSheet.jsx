@@ -4,6 +4,7 @@ import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
 import { DatePicker } from "keep-react";
 import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
 import WorkTable from "./WorkTable";
+import Swal from "sweetalert2";
 
 
 
@@ -46,7 +47,28 @@ const Employ = () => {
             workTime ,selectedValue , date , email:user.email
         }
         setWorkData(workData);
-          axiosSecure.post('/workSheet', workData);
+        
+
+
+          Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Add it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Work Add Sucessfull",
+                text: "Your work has been added.",
+                icon: "success"
+              });
+            }
+            axiosSecure.post('/workSheet', workData);
+
+          });
       }
   
       
