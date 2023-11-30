@@ -1,12 +1,60 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import useUser from "../../Components/hooks/useUsers";
 import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
 import { Dropdown } from "keep-react";
+import Swal from 'sweetalert2'
+import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Employment = () => {
+  const [selectedValue, setSelectedValue] = useState("Employee");
   const { user } = useContext(AuthContext);
-  const userData = useUser(user?.email); // this show table
+  const userData = useUser(user?.email);
   const users = userData[0];
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+
+  const handleSelectChange = (event , _id) => {
+    setSelectedValue(event.target.value);
+    Swal.fire({
+      title: "Are you sure?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Done ..."
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: `${selectedValue}`,
+          text: `Your Now this user is ${selectedValue}`,
+          icon: "success"
+        });
+        
+        console.log(event.target.value);
+        axiosSecure.patch(`/userUpdateAdmin?value=${selectedValue}&id=${_id}`).then((res) => {
+          console.log(selectedValue);
+
+          if (res.data.modifiedCount > 0) {
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: "Verify done",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+
+            // Optionally, you might want to refetch data here
+            queryClient.invalidateQueries('/yourEndpoint');
+          }
+        }).catch((error) => {
+          console.error('Error updating data:', error);
+        });
+      }
+    });
+  };
+
+  console.log(selectedValue);
   console.log(users);
   return (
     <section className="container px-4 mx-auto">
@@ -108,7 +156,7 @@ const Employment = () => {
               scope="col"
               className="px-4 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400"
             >
-              Fire
+              Status
             </th>
             <th scope="col" className="relative py-3.5 px-4">
               <span className="sr-only">Edit</span>
@@ -128,7 +176,11 @@ const Employment = () => {
                         alt=""
                       />
                     ) : (
-                      <img className="object-cover w-10 h-10 rounded-full" src="https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg" alt="" />
+                      <img
+                        className="object-cover w-10 h-10 rounded-full"
+                        src="https://cdn3.vectorstock.com/i/1000x1000/30/97/flat-business-man-user-profile-avatar-icon-vector-4333097.jpg"
+                        alt=""
+                      />
                     )}
 
                     <div>
@@ -163,12 +215,21 @@ const Employment = () => {
               <td className="px-4 py-4 text-sm whitespace-nowrap">
                 <div className="flex items-center gap-x-6">
                   <button className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
-                    <Dropdown>sdfds</Dropdown>
+                  <select
+                    onChange={(event) => handleSelectChange(event , s_users?._id , s_users?.selectedRole)}
+                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state"
+                  >
+                    <option>{s_users?.selectedRole}</option>
+                    <option>Fire</option>
+                    <option>HR</option>
+                    <option>Admin</option>
+                  </select>
                   </button>
                 </div>
               </td>
               <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                <button>Fire</button>
+                <p>ok</p>
               </td>
             </tr>
           ))}

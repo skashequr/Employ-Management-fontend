@@ -36,9 +36,9 @@ const Employmenthr = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [modalData, setModalData] = useState(null);
-  const userData = useUser(user?.email); // this show table
-  const users = userData[0];
-  console.log(users);
+  const [cart , cartRefesh] = useUser(); // this show table
+  // const users = userData[0];
+  // console.log(users);
   const { data: usersData = [], refetch } = useQuery({
     queryKey: ["usersData"],
     queryFn: async () => {
@@ -46,12 +46,15 @@ const Employmenthr = () => {
       return res.data;
     },
   });
-  console.log(usersData);
+  // console.log(usersData);
+  // const [userData2 , setUserData2] = useState(userData);
   const handleVeryfi = async (_id) => {
+   
     axiosSecure.patch(`/usersInfo/admin/${_id}`).then((res) => {
       console.log(res.data);
+      cartRefesh();
       if (res.data.modifiedCount > 0) {
-        refetch();
+        
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -59,8 +62,10 @@ const Employmenthr = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        
       }
     });
+    
   };
 
   const stripePromise = loadStripe(import.meta.env.VITE_Payment_Getway_PK);
@@ -184,7 +189,7 @@ const Employmenthr = () => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-          {users.map((s_users) => (
+          {cart.map((s_users) => (
             <tr key={s_users?._id}>
               <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                 <div className="inline-flex items-center gap-x-3">

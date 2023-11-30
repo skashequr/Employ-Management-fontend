@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MdEmail } from "react-icons/md";
 import { TbPasswordUser } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import { AuthContext } from "../../../Components/AuthProvider/AuthProvider";
 import Swal from "sweetalert2";
 const Login = () => {
     const navigate = useNavigate();
+    const [error, setError] = useState("");
     const {loginWithEmailPass} = useContext(AuthContext);
     const handleLogin =(e) => {
         e.preventDefault();
@@ -17,6 +18,7 @@ const Login = () => {
         console.log(email, password);
         loginWithEmailPass(email, password)
             .then(result => {
+                setError("")
                 const user = result.user;
                 console.log(user);
                 Swal.fire({
@@ -30,6 +32,10 @@ const Login = () => {
                 });
                 navigate(from, { replace: true });
             })
+            .catch(error => {
+                console.error('Error:', error);
+                setError(error)
+              });
     }
     return (
         <div className="flex justify-center items-center">
@@ -76,6 +82,7 @@ const Login = () => {
                         You don&#x27;t have an account?
                     </span>
                 </Link>
+                <p className="text-red-700">{error}</p>
             </div>
         </div>
         </div>

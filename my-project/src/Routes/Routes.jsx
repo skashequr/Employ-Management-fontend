@@ -12,6 +12,8 @@ import Employmenthr from "../Dashbord/Employ/EmployManageHr";
 import BarCharts from "../Dashbord/BarChart/BarChart";
 import Employ from "../Dashbord/Employ/Employ";
 import WorkSheet from "../Dashbord/workSheet/workSheet";
+import WorkSheetHrTable from "../Dashbord/workSheet/WorkSheetHrTable";
+import CountuctUS from "../Pages/ContuctUs/CountuctUS";
 
 
 export const router = createBrowserRouter([
@@ -36,6 +38,10 @@ export const router = createBrowserRouter([
         path: "/regester",
         element: <Regester></Regester>,
       },
+      {
+        path: "/contuct-us",
+        element: <CountuctUS></CountuctUS>
+      }
     ],
   },
   {
@@ -64,8 +70,14 @@ export const router = createBrowserRouter([
           },
           {
             path:"/dashbord/work-sheet",
-            element: <WorkSheet></WorkSheet>
-          }
+            element: <WorkSheet></WorkSheet>,
+            lodder:  fetch('http://localhost:5000/workSheetCount')
+          },
+          {
+            path: "/dashbord/work-sheet-hr",
+            element: <WorkSheetHrTable></WorkSheetHrTable>
+          },
+          
           
 
         ]

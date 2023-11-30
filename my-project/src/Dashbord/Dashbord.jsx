@@ -8,6 +8,7 @@ import {
 } from "phosphor-react";
 import { Link, Outlet } from "react-router-dom";
 import useLoginUser from "../Components/hooks/useLoginUser";
+import { Carousel } from "keep-react";
 const Dashbord = () => {
 
   // const {user} = useContext(AuthContext);
@@ -86,6 +87,15 @@ const userRole = userLogin[0]?.selectedRole;
                   </Sidebar.Item></Link>
                 : " "
                 }
+                 {
+                  userRole === "HR" ? 
+                  
+                  <Link to='/dashbord/work-sheet-hr'>
+                    <Sidebar.Item icon={<TreeStructure size={24} />}>     
+                    Work Sheet Data          
+                  </Sidebar.Item></Link>
+                : " "
+                }
                 <Sidebar.Item href="#" icon={<Users size={24} />}>
                   Users
                 </Sidebar.Item>
@@ -134,6 +144,9 @@ const userRole = userLogin[0]?.selectedRole;
         
       </aside>
       </div>
+      {/* dashbord for all  */}
+     
+      
       <div>
       <Outlet></Outlet>
       </div>

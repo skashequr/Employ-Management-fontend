@@ -6,6 +6,7 @@
     "moment": "^2.29.4",
     "react-chartjs-2": "^5.2.0",
     "recharts": "^2.10.1",
-    "rsuite": "^5.46.0"
+    "rsuite": "^5.46.0",
+    "sweetalert2": "^11.10.1"
   }
 }

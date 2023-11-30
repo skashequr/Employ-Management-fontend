@@ -7,7 +7,7 @@ import { AuthContext } from "../AuthProvider/AuthProvider";
 const useUser = () => {
     const axiosSecure = useAxiosSecure();
     const {user} = useContext(AuthContext);
-    const { refetch, data: cart = [] } = useQuery({
+    const { refetch:cartRefesh, data: cart = [] } = useQuery({
         queryKey: ['user', user?.email],
         queryFn: async() => {
             const res = await axiosSecure.get(`/userInfo?email=${user.email}`);
@@ -15,7 +15,7 @@ const useUser = () => {
         }
     })
 
-    return [cart, refetch]
+    return [cart, cartRefesh]
 };
 
 export default useUser;

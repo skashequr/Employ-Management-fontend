@@ -46,23 +46,9 @@ const Employ = () => {
             workTime ,selectedValue , date , email:user.email
         }
         setWorkData(workData);
-      
-      
-      
+          axiosSecure.post('/workSheet', workData);
       }
-      useEffect(() => {
-        // Make the POST request when the component mounts
-        axiosSecure.post('/workSheet', workData)
-          .then(response => {
-            console.log('Payment intent created successfully:', response.data);
-    
-          })
-          .catch(error => {
-           
-            console.error('Error creating payment intent:', error);
-          });
-      }, [axiosSecure, workData]);
-
+  
       
     return (
         <>

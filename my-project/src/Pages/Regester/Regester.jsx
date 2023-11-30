@@ -61,6 +61,7 @@ const Regester = () => {
         })
         .catch(error => {
           console.error('Error:', error);
+          setError(error)
         });
         setTimeout(() => {
           navigate(location?.state ? location.state : "/");
@@ -223,6 +224,7 @@ const Regester = () => {
                     Login here
                   </Link>
                 </p>
+                <p className="text-red-700">{error}</p>
               </form>
             </div>
           </div>
