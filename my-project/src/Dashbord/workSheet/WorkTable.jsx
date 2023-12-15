@@ -12,7 +12,7 @@ import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
 import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
 import { useContext, useEffect, useState } from "react";
 import { Pagination } from "keep-react";
-const WorkTable = () => {
+const WorkTable = ({WorkSheedDataUser}) => {
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   // const { refetch, data: workSheetData = [] } = useQuery({
@@ -27,19 +27,12 @@ const WorkTable = () => {
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [workData , setWorkData] = useState([]);
-  const { refetch:workSheedRefech, data: WorkSheedData = [] } = useQuery({
-    queryKey: ['WorkSheedData', user?.email , currentPage , itemsPerpage],
-    queryFn: async() => {
-        // why my hole system is crushed when i sue refetch in heare........
-        const res = await axiosSecure.get(`/workSheetPagination?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`);
-        return res.data;
-    }
-})
-//   console.log(workSheetData);
+  
+  console.log(WorkSheedDataUser);
 
 
   useEffect(() => {
-    fetch("http://localhost:5000/workSheetCount")
+    fetch("https://backend-seven-ruddy.vercel.app/workSheetCount?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}")
       .then((res) => res.json())
       .then((data) => setCount(data.count));
   }, []);
@@ -48,13 +41,13 @@ const WorkTable = () => {
   console.log(count, numberOfPages , workData);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/workSheetPagination?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`)
+    fetch(`http://localhost:5000/workSheetPagination?email=${user?.email}`)
     
     .then(res => res.json())
         .then(data => setWorkData(data))
 }, [currentPage , user?.email]);  // WorkSheedData
 
-console.log(WorkSheedData);
+console.log(WorkSheedDataUser);
   return (
     <div>    
       <Table showCheckbox={true}>
@@ -111,7 +104,7 @@ console.log(WorkSheedData);
           </Table.HeadCell>
           <Table.HeadCell className="min-w-[100px]" />
         </Table.Head>
-        {WorkSheedData?.map((work) => (
+        {WorkSheedDataUser?.map((work) => (
           <Table.Body key={work?._id} className="divide-y divide-gray-25">
             <Table.Row className="bg-white">
               

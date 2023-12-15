@@ -20,7 +20,7 @@ const Employ = () => {
   console.log(user?.email);
     const [pamentDetails , setPamentsDetails] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost:5000/payment/?slug=${user?.email}`)
+        fetch(`https://backend-seven-ruddy.vercel.app/payment/?slug=${user?.email}`)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');

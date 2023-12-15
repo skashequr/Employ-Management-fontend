@@ -14,13 +14,17 @@ import Employ from "../Dashbord/Employ/Employ";
 import WorkSheet from "../Dashbord/workSheet/workSheet";
 import WorkSheetHrTable from "../Dashbord/workSheet/WorkSheetHrTable";
 import CountuctUS from "../Pages/ContuctUs/CountuctUS";
+import Errorpage from "../Pages/Errorpage";
+import AdminRoutes from "./AdminRoutes";
+import HrRoutes from "./HrRoute";
+import EmployeeRoutes from "./EmployeeRoute";
 
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MAinLayout></MAinLayout>,
-    // errorElement: <NotFoundPage></NotFoundPage>,
+    errorElement: <Errorpage></Errorpage>,
     children: [
       {
         path: "/",
@@ -54,28 +58,28 @@ export const router = createBrowserRouter([
           },
           {
             path: "/dashbord/employee-list",
-            element: <Employment></Employment>
+            element: <AdminRoutes><Employment></Employment></AdminRoutes>
           },
           {
             path: "/dashbord/employee-list-hr",
-            element: <Employmenthr></Employmenthr>
+            element: <HrRoutes><Employmenthr></Employmenthr></HrRoutes>
           },
           {
             path: "/dashbord/employee-list-hr/details/:slug",
-            element: <BarCharts></BarCharts>
+            element: <HrRoutes><BarCharts></BarCharts></HrRoutes>
           },
           {
             path: "/dashbord/payment-history",
-            element: <Employ></Employ>,
+            element: <EmployeeRoutes><Employ></Employ></EmployeeRoutes>
           },
           {
             path:"/dashbord/work-sheet",
-            element: <WorkSheet></WorkSheet>,
-            lodder:  fetch('http://localhost:5000/workSheetCount')
+            element: <EmployeeRoutes><WorkSheet></WorkSheet></EmployeeRoutes>,
+            lodder:  fetch('https://backend-seven-ruddy.vercel.app/workSheetCount')
           },
           {
             path: "/dashbord/work-sheet-hr",
-            element: <WorkSheetHrTable></WorkSheetHrTable>
+            element: <HrRoutes><WorkSheetHrTable></WorkSheetHrTable></HrRoutes>
           },
           
           

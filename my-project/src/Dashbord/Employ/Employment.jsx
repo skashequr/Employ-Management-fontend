@@ -17,8 +17,9 @@ const Employment = () => {
 
 
  
-  const handleSelectChange = (event , _id) => {
-    setSelectedValue(event.target.value);
+  const handleSelectChange = (event, _id) => {
+    const selectedValue = event.target.value;
+  
     Swal.fire({
       title: "Are you sure?",
       icon: "warning",
@@ -33,20 +34,17 @@ const Employment = () => {
           text: `Your Now this user is ${selectedValue}`,
           icon: "success"
         });
-        
-        console.log(event.target.value);
+  
         axiosSecure.patch(`/userUpdateAdmin?value=${selectedValue}&id=${_id}`).then((res) => {
-          console.log(selectedValue);
-
           if (res.data.modifiedCount > 0) {
             Swal.fire({
               position: "top-end",
               icon: "success",
-              title: "Verify done",
+              title: `Now this user is ${selectedValue}`,
               showConfirmButton: false,
               timer: 1500,
             });
-
+  
             // Optionally, you might want to refetch data here
             queryClient.invalidateQueries('/yourEndpoint');
           }
@@ -55,10 +53,8 @@ const Employment = () => {
         });
       }
     });
-
-
-    
   };
+  
 
   console.log(selectedValue);
   console.log(users);
@@ -222,11 +218,13 @@ const Employment = () => {
                 <div className="flex items-center gap-x-6">
                   <button className="text-gray-500 transition-colors duration-200 dark:hover:text-red-500 dark:text-gray-300 hover:text-red-500 focus:outline-none">
                   <select
+                    value={s_users?.selectedRole}
                     onChange={(event) => handleSelectChange(event , s_users?._id , s_users?.selectedRole)}
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="grid-state"
                   >
-                    <option>{s_users?.selectedRole}</option>
+                   
+                   <option>Employee</option>
                     <option>Fire</option>
                     <option>HR</option>
                     <option>Admin</option>

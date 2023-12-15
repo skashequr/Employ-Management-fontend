@@ -3,10 +3,18 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Components/AuthProvider/AuthProvider";
 import { DatePicker } from "keep-react";
 import useAxiosSecure from "../../Components/hooks/useAxiosSecqure";
-import WorkTable from "./WorkTable";
+import { Pagination } from "keep-react";
 import Swal from "sweetalert2";
-
-
+import { useQuery } from "@tanstack/react-query";
+import {
+  ArrowsDownUp,
+  Crown,
+  Cube,
+  DotsThreeOutline,
+  Pencil,
+  Trash,
+} from "phosphor-react";
+import { Badge, Button, Popover, Table } from "keep-react";
 
 const Employ = () => {
   const {user} = useContext(AuthContext);
@@ -16,7 +24,7 @@ const Employ = () => {
   console.log(user?.email);
     const [pamentDetails , setPamentsDetails] = useState([]);
     useEffect(() => {
-        fetch(`http://localhost:5000/payment/?slug=${user?.email}`)
+        fetch(`https://backend-seven-ruddy.vercel.app/payment/?slug=${user?.email}`)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
@@ -31,6 +39,39 @@ const Employ = () => {
           });
       }, [user?.email]);
 
+      
+      const itemsPerpage = 5;
+      const [count, setCount] = useState(0);
+      const [currentPage, setCurrentPage] = useState(1);
+      useEffect(() => {
+        fetch(`https://backend-seven-ruddy.vercel.app/workSheetCount?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`)
+          .then((res) => res.json())
+          .then((data) => setCount(data.count));
+      }, [currentPage , user?.email]);
+      console.log(count);
+      const [x,setx] = useState(false);
+      
+      const numberOfPages = Math.ceil(count / itemsPerpage);
+      const { refetch: workSheedRefetch, data: WorkSheedDataUser = [] } = useQuery({
+        queryKey: ['WorkSheedDataUser', 'user-email' , x , user?.email],
+        queryFn: async () => {
+          try {
+            const res = await axiosSecure.get(`/workSheetPagination?email=${user?.email}`);
+            return res.data;
+          } catch (error) {
+            console.error('Error fetching data:', error);
+            throw error;
+          }
+        }
+      });
+      // page=${currentPage}&size=${itemsPerpage}&
+      console.log(WorkSheedDataUser);
+      useEffect(() => {
+        fetch(`https://backend-seven-ruddy.vercel.app/workSheetPagination?page=${currentPage}&size=${itemsPerpage}&email=${user?.email}`)
+          .then((res) => res.json())
+          .then((data) => console.log(data));
+      }, [currentPage , user?.email]);
+      
       console.log(pamentDetails);
       const handleSelectChange = (event) => {
         // Update the state with the selected value
@@ -38,9 +79,11 @@ const Employ = () => {
         
       
       };
+      
       const axiosSecure = useAxiosSecure();
       const handleSubmit = e =>{
         e.preventDefault();
+        
         const workTime = e.target.time.value;
         console.log(workTime , selectedValue , date , user?.email);
         const workData = {
@@ -66,9 +109,12 @@ const Employ = () => {
                 icon: "success"
               });
             }
-            axiosSecure.post('/workSheet', workData);
+            axiosSecure.post('/workSheet', workData)
+            .then(()=>{setx(!x)})
 
           });
+          workSheedRefetch();
+          
       }
   
       
@@ -117,7 +163,155 @@ const Employ = () => {
     </div>
          </form>
 
-          <WorkTable></WorkTable>
+         <Table showCheckbox={true}>
+        <Table.Caption>
+          <div className="my-5 flex items-center justify-between px-6">
+            <div className="flex items-center gap-5">
+              <p className="text-body-1 font-semibold text-metal-600">
+               Your Work History
+              </p>
+            </div>
+            <div className="flex items-center gap-5">
+              <Button type="outlineGray" size="sm">
+                <span className="pr-2">
+                  <Cube size={24} />
+                </span>
+                New member
+              </Button>
+              <Button type="outlineGray" size="sm">
+                <span className="pr-2">
+                  <Cube size={24} />
+                </span>
+                Search
+              </Button>
+            </div>
+          </div>
+        </Table.Caption>
+        <Table.Head>
+          <Table.HeadCell className="min-w-[290px]">
+            <p className="text-body-6 font-medium text-metal-400">ID</p>
+          </Table.HeadCell>
+          <Table.HeadCell
+            className="min-w-[183px]"
+            icon={<ArrowsDownUp size={14} color="#8897AE" />}
+          >
+            Date
+          </Table.HeadCell>
+          <Table.HeadCell
+            className="min-w-[160px]"
+            icon={<ArrowsDownUp size={14} color="#8897AE" />}
+          >
+            Status
+          </Table.HeadCell>
+          <Table.HeadCell
+            className="min-w-[150px]"
+            icon={<ArrowsDownUp size={14} color="#8897AE" />}
+          >
+            work Time
+          </Table.HeadCell>
+          <Table.HeadCell
+            className="min-w-[183px]"
+            icon={<ArrowsDownUp size={14} color="#8897AE" />}
+          >
+            Email
+          </Table.HeadCell>
+          <Table.HeadCell className="min-w-[100px]" />
+        </Table.Head>
+        {WorkSheedDataUser?.map((work) => (
+          <Table.Body key={work?._id} className="divide-y divide-gray-25">
+            <Table.Row className="bg-white">
+              
+              <Table.Cell>
+                <p className="text-body-5 font-medium text-metal-500">
+                  {work?._id}
+                </p>
+                <p className="text-body-6 font-normal text-metal-500">
+                  
+                </p>
+              </Table.Cell>
+              <Table.Cell>
+                <p className="text-body-5 font-medium text-metal-500">
+                {work?.date}
+                </p>
+              </Table.Cell>
+              <Table.Cell>
+                <div className="inline-block">
+                  <Badge
+                    colorType="light"
+                    color="success"
+                    icon={<Crown size={18} weight="light" />}
+                    iconPosition="left"
+                  >
+                    {work?.selectedValue}
+                  </Badge>
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <div className="inline-block">
+                  <Badge
+                    colorType="light"
+                    color="success"
+                    icon={<Crown size={18} weight="light" />}
+                    iconPosition="left"
+                  >
+                    {work?.workTime}
+                  </Badge>
+                </div>
+              </Table.Cell>
+              <Table.Cell>
+                <p className="text-body-5 font-medium text-metal-500">
+                  {work?.email}
+                </p>
+                <p className="text-body-6 font-normal text-metal-500">
+                  
+                </p>
+              </Table.Cell>
+              <Table.Cell>
+                <Popover
+                  showDismissIcon={false}
+                  showArrow={false}
+                  className="w-48 p-2 border border-metal-100"
+                  additionalContent={
+                    <ul className="flex flex-col gap-1">
+                      <li className="hover:bg-metal-100 py-1 px-2 rounded">
+                        <button className="w-full flex items-center justify-between text-body-4 font-normal text-metal-600">
+                          <span>Delete</span>
+                          <span>
+                            <Trash />
+                          </span>
+                        </button>
+                      </li>
+                      <li className="hover:bg-metal-100 py-1 px-2 rounded">
+                        <button className="w-full flex items-center justify-between text-body-4 font-normal text-metal-600">
+                          <span>Edit</span>
+                          <span>
+                            <Pencil />
+                          </span>
+                        </button>
+                      </li>
+                    </ul>
+                  }
+                >
+                  <Button type="outlineGray" size="xs" circle={true}>
+                    <DotsThreeOutline size={14} color="#5E718D" weight="bold" />
+                  </Button>
+                </Popover>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        ))}
+        
+      </Table>
+      <div className="flex justify-center items-center mb-16 mt-6">
+        <Pagination
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+          totalPages={numberOfPages}
+          iconWithOutText={true}
+          prevNextShape="none"
+          showGoToPaginate={true}
+        />
+      </div>
         </>
     );
 };

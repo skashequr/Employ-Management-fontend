@@ -24,7 +24,7 @@ const WorkSheetHrTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [workData , setWorkData] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/workSheetCount")
+    fetch("https://backend-seven-ruddy.vercel.app/workSheetCount")
       .then((res) => res.json())
       .then((data) => setCount(data.count));
   }, []);
